@@ -8,33 +8,39 @@
 
 <body>
     <div id="main-wrapper">
-        <div id="yellow">
             <div id="orange-wrapper">
                 <div class="orange" id="top-left"></div>
                 <div class="orange" id="top-right"></div>
                 <div class="orange" id="bottom-left"></div>
                 <div class="orange" id="bottom-right"></div>
-            </div> <!--orange-wrapper-->
+            </div>
+            <!--orange-wrapper-->
             <div id="console">
-                <div class="controls" id="logo"><span id="logo-text">Simon</span></div>
+                <div class="controls" id="logo">
+                    <span id="logo-text">Simon</span>
+                </div>
                 <div class="controls" id="controls-center-wrapper">
-                    <div class="controls-center" id="count-wrapper">
-                        <div id="count"></div>
-                        <div class="text">count</div>
-                    </div>
-                    <div class="controls-center" id="start-wrapper">
-                        <div id="start"></div>
-                        <div class="text">start</div>
-                    </div>
+                    <div class="controls-center" id="count"></div>
+                    <div class="controls-center" id="start"></div>
                     <div class="controls-center" id="strict-wrapper">
                         <div id="strict-light"></div>
                         <div id="strict"></div>
-                        <div class="text">strict</div>
+                    </div>
+                    <div id="text-wrapper">
+                        <div class="text" id="count-text">count</div>
+                        <div class="text" id="start-text">start</div>
+                        <div class="text" id="strict-text">strict</div>
                     </div>
                 </div> <!-- controls-center-wrapper -->
-                <div class="controls" id="power"></div>
+                <div id="switch-wrapper">
+                    <div class="power text" id="on-text">ON</div>
+                    <div class="controls power" id="power-wrapper">
+                        <div class="power" id="on"></div>
+                        <div class="power" id="off"></div>
+                    </div>
+                    <div class="power text" id="off-text">OFF</div>
+                </div>
             </div> <!-- console -->
-        </div> <!--yellow-->
     </div> <!--main wrapper-->
 </body>
 
