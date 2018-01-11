@@ -3,24 +3,25 @@
 
 <head>
     <link href="styles.css" rel="stylesheet">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="main.js"></script>
     <title>Simon</title>
 </head>
 
 <body>
     <div id="main-wrapper">
-            <div id="orange-wrapper">
-                <div class="orange" id="top-left"></div>
-                <div class="orange" id="top-right"></div>
-                <div class="orange" id="bottom-left"></div>
-                <div class="orange" id="bottom-right"></div>
+            <div id="game-wrapper">
+                <div class="game-button" id="green"></div>
+                <div class="game-button" id="red"></div>
+                <div class="game-button" id="blue"></div>
+                <div class="game-button" id="yellow"></div>
             </div>
-            <!--orange-wrapper-->
             <div id="console">
-                <div class="controls" id="logo">
+                <div id="logo">
                     <span id="logo-text">Simon</span>
                 </div>
-                <div class="controls" id="controls-center-wrapper">
-                    <div class="controls-center" id="count"></div>
+                <div id="controls-center-wrapper">
+                    <div class="controls-center" id="count"><span id="steps">--</span></div>
                     <div class="controls-center" id="start"></div>
                     <div class="controls-center" id="strict-wrapper">
                         <div id="strict-light"></div>
@@ -33,15 +34,26 @@
                     </div>
                 </div> <!-- controls-center-wrapper -->
                 <div id="switch-wrapper">
-                    <div class="power text" id="on-text">ON</div>
-                    <div class="controls power" id="power-wrapper">
-                        <div class="power" id="on"></div>
-                        <div class="power" id="off"></div>
-                    </div>
                     <div class="power text" id="off-text">OFF</div>
+                    <div class="power" id="power-wrapper">
+                        <div class="power" id="power-switch"></div>
+                    </div>
+                    <div class="power text" id="on-text">ON</div>
                 </div>
             </div> <!-- console -->
     </div> <!--main wrapper-->
+    <audio id="green-sound">
+        <source src="https://s3.amazonaws.com/freecodecamp/simonSound1.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="red-sound">
+        <source src="https://s3.amazonaws.com/freecodecamp/simonSound2.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="yellow-sound">
+        <source src="https://s3.amazonaws.com/freecodecamp/simonSound3.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="blue-sound">
+        <source src="https://s3.amazonaws.com/freecodecamp/simonSound4.mp3" type="audio/mpeg">
+    </audio>
 </body>
 
 </html>
