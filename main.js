@@ -9,12 +9,13 @@ $(document).ready( function(){
     const NUMBER_OF_MOVES = 5;
     var start = false;
     var userTurn = false;
-    var steps = 1;
-    var run, myWin;
+    var stepsInCurrentSeries = 1;
+    var myWin;
     var userMoves = 0;
     var wrongMove = false;
     var nowPlaying = false;
     var playerWon = false;
+    var tempo = 1000;
 
     function setStepCount(){
         if (!powerOn){
@@ -32,42 +33,54 @@ $(document).ready( function(){
             $("#steps").addClass("blink");
         } 
         
-        if (steps > 0 &&  nowPlaying) {
+        if (stepsInCurrentSeries > 0 &&  nowPlaying) {
             setTimeout(function(){
-                $("#steps").text(steps);
+                $("#steps").text(stepsInCurrentSeries);
                 $("#steps").removeClass("blink");
             }, 1000);
         }
     }
 
     // SOUND
+    var wrongSound = document.getElementById("wrong-sound");
+    var greenSound = document.getElementById("green-sound");
+    var redSound = document.getElementById("red-sound");
+    var yellowSound = document.getElementById("yellow-sound");
+    var blueSound = document.getElementById("blue-sound");
+
     function playSound(button){
+        var pressedClassTimeout = 100
         if (button === wrongMove){
-            document.getElementById("wrong-sound").play();
+            wrongSound.currentTime = 0;
+            wrongSound.play();
         } else if (button === "green"){
             $("#green").addClass("pressed");
             setTimeout(function(){
                 $("#green").removeClass("pressed");
-            }, 200);
-            document.getElementById("green-sound").play();
+            }, pressedClassTimeout);
+            greenSound.currentTime = 0;
+            greenSound.play();
         } else if (button === "red"){
             $("#red").addClass("pressed");
             setTimeout(function(){
                 $("#red").removeClass("pressed");
-            }, 200);
-            document.getElementById("red-sound").play();
+            }, pressedClassTimeout);
+            redSound.currentTime = 0;
+            redSound.play();
         } else if (button === "yellow"){
             $("#yellow").addClass("pressed");
             setTimeout(function(){
                 $("#yellow").removeClass("pressed");
-            }, 200);
-            document.getElementById("yellow-sound").play();
+            }, pressedClassTimeout);
+            yellowSound.currentTime = 0;
+            yellowSound.play();
         } else if (button === "blue"){
             $("#blue").addClass("pressed");
             setTimeout(function(){
                 $("#blue").removeClass("pressed");
-            }, 200);
-            document.getElementById("blue-sound").play();
+            }, pressedClassTimeout);
+            blueSound.currentTime = 0;
+            blueSound.play();
         }   
     }
     
@@ -79,21 +92,33 @@ $(document).ready( function(){
         nowPlaying = true;
         setStepCount();
 
-        run = setInterval(function(){
-            console.log(stepsLocal + " step is:" + sequence[step]);
+        if (stepsInCurrentSeries === 4){
+            tempo = 800;
+        } else if (stepsInCurrentSeries === 8){
+            tempo = 600;
+        } else if (stepsInCurrentSeries === 12){
+            tempo = 400;
+        }
+
+        var runSeries = function() {
+            //console.log(stepsLocal + " step is:" + sequence[step] + " and tempo is " + tempo);
             playSound(sequence[step]);
             step++;
-            stepsLocal++;
-            if(step >= steps){
+
+            if(step >= stepsInCurrentSeries){
                 userTurn = true;
                 userMoves = 0;
-                clearInterval(run);
+            } else {
+                setTimeout(runSeries, tempo);
             }
-        }, 1000);
+
+        }
+        setTimeout(runSeries, tempo);
+
     }
 
     function reset(){
-        steps = 1;
+        stepsInCurrentSeries = 1;
         userTurn = false;
         nowPlaying = false;
         start = true;
@@ -117,24 +142,27 @@ $(document).ready( function(){
 
         var i = 0;
         var revolutions = 0;
+        var winTempo = 100;
 
         // play a bunch of sounds in rapid succession - yay
-        myWin = setInterval(function(){
+        var myWin = function(){
             playSound(buttons[i]);
             i++;
             if (i === buttons.length){
                 i = 0;
                 revolutions++;
             }
-            if (revolutions === 4){
-                clearInterval(myWin);
+            if (revolutions < 4){
+                setTimeout(myWin, winTempo);
             }
-        }, 100);
+        }
+        setTimeout(myWin, winTempo);
+
     }
 
     function play(e){
         var target = e.target.id;
-        console.log("user has clicked: " + target);
+        //console.log("user has clicked: " + target);
 
         // POWER SWITCH
         if (target === "power-switch"){
@@ -173,16 +201,16 @@ $(document).ready( function(){
                     userMoves++;
 
                     // if they've guessed all of the steps in the current series...
-                    if (userMoves >= steps){
+                    if (userMoves >= stepsInCurrentSeries){
                         // if it's the full series, they win!
-                        if (steps === NUMBER_OF_MOVES){
-                            win();
+                        if (stepsInCurrentSeries === NUMBER_OF_MOVES){
+                            setTimeout(win, 500);
 
                         // if it's not the full series, the turn ends and another 
                         // step is added to the series
                         } else {
                             userTurn = false;
-                            steps++;
+                            stepsInCurrentSeries++;
                             setStepCount();
                             playSequence();    
                         }
