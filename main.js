@@ -29,6 +29,9 @@ $(document).ready( function(){
             } else if (playerWon){
                 $("#steps").text("!!");
                 playerWon = false;
+                setTimeout(function(){
+                    $("#steps").text("--");
+                }, 3000);
             }
             $("#steps").addClass("blink");
         } 
