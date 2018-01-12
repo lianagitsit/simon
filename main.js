@@ -10,15 +10,40 @@ $(document).ready( function(){
     var start = false;
     var userTurn = false;
     var steps = 1;
+    var myVar;
+    var userMoves = 0;
+    var wrongMove = false;
+    var nowPlaying = false;
+    var playerWon = false;
 
     function setStepCount(){
-        setTimeout(function(){
-            $("#steps").text(steps);
-        }, 1000);
+        if (!powerOn){
+            $("#steps").text("--");
+        
+        // flash step counter at game start and on wrong move
+        } else if ((start && $("#steps").text() === "--") || wrongMove || playerWon){
+            if (wrongMove){
+                $("#steps").text("XX");
+                wrongMove = false;
+            } else if (playerWon){
+                $("#steps").text("!!");
+                playerWon = false;
+            }
+            $("#steps").addClass("blink");
+        } 
+        
+        if (steps > 0 &&  nowPlaying) {
+            setTimeout(function(){
+                $("#steps").text(steps);
+                $("#steps").removeClass("blink");
+            }, 1000);
+        }
     }
 
     function playSound(button){
-        if (button === "green"){
+        if (button === wrongMove){
+            document.getElementById("wrong-sound").play();
+        } else if (button === "green"){
             $("#green").addClass("pressed");
             setTimeout(function(){
                 $("#green").removeClass("pressed");
@@ -44,20 +69,82 @@ $(document).ready( function(){
             document.getElementById("blue-sound").play();
         }   
     }
+    
+    function playSequence(){
+        var step = 0;
+        var stepsLocal = 1;
+        nowPlaying = true;
+        setStepCount();
+        myVar = setInterval(function(){
+            console.log(stepsLocal + " step is:" + sequence[step]);
+            playSound(sequence[step]);
+            step++;
+            stepsLocal++;
+            if(step >= steps){
+                userTurn = true;
+                userMoves = 0;
+                clearInterval(myVar);
+            }
+        }, 1000);
+    }
+
+    function reset(){
+        steps = 1;
+        userTurn = false;
+        nowPlaying = false;
+        start = true;
+
+        console.log("start");
+
+        // generate array with the gameplay sequence
+        for (var i = 0; i < NUMBER_OF_MOVES; i++){
+            sequence[i] = buttons[Math.floor(Math.random() * 3)];
+        }
+
+        console.log("sequence: " + sequence);
+
+        $("#steps").text("--");
+        setStepCount();
+        //playSequence();
+    }
+
+    var myWin;
+    function win(){
+        playerWon = true;
+        nowPlaying = false;
+        setStepCount();
+        var i = 0;
+        var revolutions = 0;
+        myWin = setInterval(function(){
+            playSound(buttons[i]);
+            i++;
+            if (i === buttons.length){
+                i = 0;
+                revolutions++;
+            }
+            if (revolutions === 4){
+                clearInterval(myWin);
+            }
+        }, 100);
+
+
+    }
 
     function play(e){
         var target = e.target.id;
         console.log("user has clicked: " + target);
 
         if (target === "power-switch"){
-            powerOn ? powerOn = false : powerOn = true;
             $("#power-switch").toggleClass("on");
             $("#steps").toggleClass("steps-power-on");
-            if (powerOn){
+            if (!powerOn){
+                powerOn = true;
+                setStepCount();
                 console.log("power is on");
             } else {
+                powerOn = false;
+                reset();
                 console.log("power is off");
-                $("#steps").text("--");
             }
         }
 
@@ -72,79 +159,35 @@ $(document).ready( function(){
                     console.log("strict mode is off");
                 }
             } else if (target === "start"){
-                start = true;
-                console.log("start");
-                // generate array with the gameplay sequence
-                for (var i = 0; i < NUMBER_OF_MOVES; i++){
-                    sequence[i] = buttons[Math.floor(Math.random() * 3)];
-                }
 
-                // flash step counter - add CSS class for this?
-                $("#steps").toggle();
-                setTimeout( function(){
-                    $("#steps").toggle();
-                }, 200);
-
-                setStepCount();
-
-                // press the button
-               /* if (sequence[steps - 1] === "red"){
-                    setTimeout(function(){
-                        //$("#red").toggleClass("pressed");
-                        document.getElementById("red-sound").play();
-                        console.log(steps + " step is:" + sequence[steps - 1]);
-                        //$("#red").toggleClass("pressed");
-                        // set the number of steps the user has to do
-                        
-
-                    }, 1000);
-                    userTurn = true;
-                }*/
-
-                console.log("sequence: " + sequence);
-
-                var myVar;
-                var step = 0;
-                
-                function playSequence(){
-                    myVar = setInterval(function(){
-                        console.log(steps + " step is:" + sequence[step]);
-                        playSound(sequence[step]);
-                        step++;
-                        //steps++;
-                        if(step >= steps){
-                            userTurn = true;
-                            clearInterval(myVar);
-                        }
-                    }, 1000);
-
-                }
-
+                reset();
                 playSequence();
-
-
-                /*for (var step = 0; step < 6; step++){
-                    setTimeout(function(){
-                        playSound(sequence[step]);
-                        console.log(steps + " step is:" + sequence[steps - 1]);
-                    }, 1000);
-                }*/
+                start = false;
             } 
 
-            var userMoves = 0;
-
-            if (userTurn){
-                playSound(target);
+            if (userTurn === true){
                 if (target === sequence[userMoves]){
+                    playSound(target);
                     console.log("correct move");
                     userMoves++;
-                    if(userMoves === steps){
-                        console.log("user turn is over");
-                        userTurn = false;
-                        steps++;
-                        setStepCount();
+                    if(userMoves >= steps){
+                        if (steps === NUMBER_OF_MOVES){
+                            console.log("YOU WON!!!!!!");
+                            win();
+                        } else {
+                            console.log("user turn is over");
+                            userTurn = false;
+                            steps++;
+                            setStepCount();
+                            playSequence();    
+                        }
                     }
-
+                } else if (target !== sequence[userMoves] && buttons.indexOf(target) !== -1) {
+                    console.log("YOU ARE WRONG");
+                    wrongMove = true;
+                    playSound(wrongMove);
+                    setStepCount();
+                    playSequence();
                 }
 
             }

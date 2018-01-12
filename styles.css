@@ -2,10 +2,11 @@
 
 #game-wrapper {
     background-color: black;
-    border-top-left-radius: 95%;
-    border-top-right-radius: 92%;
-    border-bottom-left-radius: 92%;
-    border-bottom-right-radius: 92%;
+    border-radius: 49%;
+    /*border-top-left-radius: 80%;
+    border-top-right-radius: 80%;
+    border-bottom-left-radius: 80%;
+    border-bottom-right-radius: 80%;*/
     height: 540px;
     width: 540px;
     position: relative;
@@ -21,15 +22,12 @@
     display: inline-block;
 }
 
-
-
-
 #green { 
     border-top-left-radius: 100%; 
     background-color: green; 
     box-shadow: inset 5px 5px 10px green;
     margin-top: 35px;
-    margin-left: 35px;
+    margin-left: 33px;
 }
 
 #red { 
@@ -42,7 +40,7 @@
 #blue { 
     border-bottom-left-radius: 100%; 
     background-color: blue;
-    margin-left: 35px;
+    margin-left: 33px;
     margin-top: 30px;
 }
 #yellow { 
@@ -97,6 +95,25 @@
     width: 55px;
     position: relative;
     right: 20px;
+}
+
+@keyframes blink {
+    0% {opacity: 0}
+	49%{opacity: 0}
+	50% {opacity: 1}
+}
+
+@-webkit-keyframes blink {
+	0% {opacity: 0}
+	49%{opacity: 0}
+	50% {opacity: 1}
+}
+
+.blink {
+    animation: blink .3s;
+    animation-iteration-count: 3;
+    -webkit-animation: blink .3s;
+    -webkit-animation-iteration-count: 3;
 }
 
 #steps {
