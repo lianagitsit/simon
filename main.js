@@ -10,7 +10,7 @@ $(document).ready( function(){
     var start = false;
     var userTurn = false;
     var steps = 1;
-    var myVar;
+    var run, myWin;
     var userMoves = 0;
     var wrongMove = false;
     var nowPlaying = false;
@@ -20,7 +20,7 @@ $(document).ready( function(){
         if (!powerOn){
             $("#steps").text("--");
         
-        // flash step counter at game start and on wrong move
+        // flash step counter at game start, wrong move, and win
         } else if ((start && $("#steps").text() === "--") || wrongMove || playerWon){
             if (wrongMove){
                 $("#steps").text("XX");
@@ -40,6 +40,7 @@ $(document).ready( function(){
         }
     }
 
+    // SOUND
     function playSound(button){
         if (button === wrongMove){
             document.getElementById("wrong-sound").play();
@@ -70,12 +71,15 @@ $(document).ready( function(){
         }   
     }
     
+    // play the sequence up until the number of steps in the current series
     function playSequence(){
         var step = 0;
         var stepsLocal = 1;
+
         nowPlaying = true;
         setStepCount();
-        myVar = setInterval(function(){
+
+        run = setInterval(function(){
             console.log(stepsLocal + " step is:" + sequence[step]);
             playSound(sequence[step]);
             step++;
@@ -83,7 +87,7 @@ $(document).ready( function(){
             if(step >= steps){
                 userTurn = true;
                 userMoves = 0;
-                clearInterval(myVar);
+                clearInterval(run);
             }
         }, 1000);
     }
@@ -94,8 +98,6 @@ $(document).ready( function(){
         nowPlaying = false;
         start = true;
 
-        console.log("start");
-
         // generate array with the gameplay sequence
         for (var i = 0; i < NUMBER_OF_MOVES; i++){
             sequence[i] = buttons[Math.floor(Math.random() * 3)];
@@ -105,16 +107,18 @@ $(document).ready( function(){
 
         $("#steps").text("--");
         setStepCount();
-        //playSequence();
     }
 
-    var myWin;
     function win(){
         playerWon = true;
         nowPlaying = false;
+
         setStepCount();
+
         var i = 0;
         var revolutions = 0;
+
+        // play a bunch of sounds in rapid succession - yay
         myWin = setInterval(function(){
             playSound(buttons[i]);
             i++;
@@ -126,20 +130,18 @@ $(document).ready( function(){
                 clearInterval(myWin);
             }
         }, 100);
-
-
     }
 
     function play(e){
         var target = e.target.id;
         console.log("user has clicked: " + target);
 
+        // POWER SWITCH
         if (target === "power-switch"){
             $("#power-switch").toggleClass("on");
             $("#steps").toggleClass("steps-power-on");
             if (!powerOn){
                 powerOn = true;
-                setStepCount();
                 console.log("power is on");
             } else {
                 powerOn = false;
@@ -149,44 +151,54 @@ $(document).ready( function(){
         }
 
         if (powerOn){
-            if (target === "strict"){
+
+            // START
+            if (target === "start"){
+                reset();
+                start = false;
+                playSequence();
+            
+            // STRICT MODE
+            } else if (target === "strict"){
                 // if strict mode is on, turn it off; if it's off, turn it on
                 strictOn ? strictOn = false : strictOn = true;
                 $("#strict-light").toggleClass("strict-light-on");
-                if (strictOn){
-                    console.log("strict mode is on");
-                } else {
-                    console.log("strict mode is off");
-                }
-            } else if (target === "start"){
-
-                reset();
-                playSequence();
-                start = false;
             } 
 
+            // USER'S TURN
             if (userTurn === true){
+                // if the user moves correctly, let them make the next move
                 if (target === sequence[userMoves]){
                     playSound(target);
-                    console.log("correct move");
                     userMoves++;
-                    if(userMoves >= steps){
+
+                    // if they've guessed all of the steps in the current series...
+                    if (userMoves >= steps){
+                        // if it's the full series, they win!
                         if (steps === NUMBER_OF_MOVES){
-                            console.log("YOU WON!!!!!!");
                             win();
+
+                        // if it's not the full series, the turn ends and another 
+                        // step is added to the series
                         } else {
-                            console.log("user turn is over");
                             userTurn = false;
                             steps++;
                             setStepCount();
                             playSequence();    
                         }
                     }
+                
+                // if they make the wrong move, alert them and replay the current sequence
                 } else if (target !== sequence[userMoves] && buttons.indexOf(target) !== -1) {
-                    console.log("YOU ARE WRONG");
                     wrongMove = true;
                     playSound(wrongMove);
                     setStepCount();
+
+                    // if strict mode is on, the game restarts with a fresh sequence
+                    if (strictOn){
+                        reset();
+                    }
+
                     playSequence();
                 }
 
