@@ -6,7 +6,7 @@ $(document).ready( function(){
     var userMoves = 0;
     var buttons = ["green", "red", "yellow", "blue"];
     var sequence = [];
-    const NUMBER_OF_MOVES = 5;
+    const NUMBER_OF_MOVES = 15;
     var start = false;
     var userTurn = false;
     var stepsInCurrentSeries = 1;
