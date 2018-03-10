@@ -2,7 +2,7 @@
 
 Simon, made in JavaScript, jQuery, HTML, and CSS.
 
-<img src="https://github.com/lianagitsit/simon/raw/master/images/simon-on.png" width="250">
+<img src="https://github.com/lianagitsit/simon/raw/master/images/simon-on.png" width="400">
 
 * Turn the game on, and press START to begin.
 * Repeat the same steps the game gives you - make it all the way through 15 steps and win!
