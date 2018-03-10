@@ -10,38 +10,55 @@
 
 <body>
     <div id="main-wrapper">
-            <div id="game-wrapper">
-                <div class="game-button" id="green"></div>
-                <div class="game-button" id="red"></div>
-                <div class="game-button" id="blue"></div>
-                <div class="game-button" id="yellow"></div>
+        <div id="game-wrapper">
+            <div class="game-button" id="green"></div>
+            <div class="game-button" id="red"></div>
+            <div class="game-button" id="blue"></div>
+            <div class="game-button" id="yellow"></div>
+        </div>
+        <div id="console">
+            <div id="logo">
+                <span id="logo-text">Simon</span>
             </div>
-            <div id="console">
-                <div id="logo">
-                    <span id="logo-text">Simon</span>
+            <div id="controls-center-wrapper">
+                <div class="controls-center" id="count">
+                    <span id="steps">--</span>
                 </div>
-                <div id="controls-center-wrapper">
-                    <div class="controls-center" id="count"><span id="steps">--</span></div>
-                    <div class="controls-center" id="start"></div>
-                    <div class="controls-center" id="strict-wrapper">
-                        <div id="strict-light"></div>
-                        <div id="strict"></div>
-                    </div>
-                    <div id="text-wrapper">
-                        <div class="text" id="count-text">count</div>
-                        <div class="text" id="start-text">start</div>
-                        <div class="text" id="strict-text">strict</div>
-                    </div>
-                </div> <!-- controls-center-wrapper -->
-                <div id="switch-wrapper">
-                    <div class="power text" id="off-text">OFF</div>
-                    <div class="power" id="power-wrapper">
-                        <div class="power" id="power-switch"></div>
-                    </div>
-                    <div class="power text" id="on-text">ON</div>
+                <div class="controls-center" id="start"></div>
+                <div class="controls-center" id="strict-wrapper">
+                    <div id="strict-light"></div>
+                    <div id="strict"></div>
                 </div>
-            </div> <!-- console -->
-    </div> <!--main wrapper-->
+                <div id="text-wrapper">
+                    <div class="text" id="count-text">count</div>
+                    <div class="text" id="start-text">start</div>
+                    <div class="text" id="strict-text">strict</div>
+                </div>
+            </div>
+            <!-- controls-center-wrapper -->
+            <div id="switch-wrapper">
+                <div class="power text" id="off-text">OFF</div>
+                <div class="power" id="power-wrapper">
+                    <div class="power" id="power-switch"></div>
+                </div>
+                <div class="power text" id="on-text">ON</div>
+            </div>
+        </div>
+        <!-- console -->
+    </div>
+    <!--main wrapper-->
+
+    <div id="rules-wrapper">
+        <ul>
+            <li id="how-to" class="rule">How to Play:</li>
+            <li class="rule">Turn the blue slider ON, and press START to begin.</li>
+            <li class="rule">Repeat the same steps the game gives you - make it all the way through 15 steps and win!</li>
+            <li class="rule">If you make a mistake, the series will repeat and allow you to try again.</li>
+            <li class="rule">Tempo speeds up on moves 5, 9, and 13.</li>
+            <li class="rule">Turn on STRICT mode for a greater challenge - make a mistake in this mode, and the whole game restarts!</li>
+            <li class="rule">To reset the game at any time, press START.</li>
+        </ul>
+    </div>
     <audio id="green-sound">
         <source src="https://s3.amazonaws.com/freecodecamp/simonSound1.mp3" type="audio/mpeg">
     </audio>
